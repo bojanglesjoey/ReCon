@@ -16,6 +16,7 @@ app.layout = html.Div([
     html.Div(id='page-content')
 ])
 
+arguments = [-1,-1,-1,-1,-1]
 #title of web page
 app.title = 'ReCon'
 
@@ -108,9 +109,10 @@ page_2_layout = html.Div([
                 dcc.Dropdown(
                     id='dropdown2',
                     options=[
-                        {'label':'Scatter Plot','value':'SCAT'},
-                        {'label':'Surface Plot','value':'SURF'},
-                        {'label':'Heat Map','value':'HEAT'}
+                        {'label':'3D Scatter Plot','value':'Scatter3d'},
+                        {'label':'2D Scatter Plot','value':'Scatter'},
+                        {'label':'Surface Plot','value':'Surface'},
+                        {'label':'Heat Map','value':'Heatmap'}
                     ],
                     value=['SCAT','SURF','HEAT'],
                     #multi=False,
@@ -202,7 +204,12 @@ page_2_layout = html.Div([
     html.Div(id='page-2-content'),
     html.Br(),
     dcc.Link('Go to Home Page', href='/'),
-    ])
+    ]),
+    html.Div(id='gas_type'),
+    html.Div(id='graph_type'),
+    html.Div(id='x-axis'),
+    html.Div(id='y-axis'),
+    html.Div(id='z-axis'),
 ])
 
 page_1_layout = html.Div(children=[
@@ -221,8 +228,8 @@ page_1_layout = html.Div(children=[
              src="https://fournews-assets-prod-s3b-ew1-aws-c4-pml.s3.amazonaws.com/media/2017/06/global-temperatures-nasa.jpg",
              className ="twelve columns",
              style={
-                 'height': '100%',
-                 'width': '100%',
+                 'height': '75%',
+                 'width': '75%',
                  'float': 'middle',
                  'position': 'relative',
                  'margin-top': 10,
@@ -238,8 +245,10 @@ page_1_layout = html.Div(children=[
              src="https://fournews-assets-prod-s3-ew1-nmprod.s3.amazonaws.com/media/2017/06/co2-nasa.jpg",
              className ="twelve columns",
              style={
-                 'height': '100%',
-                 'width': '100%',
+                 'fontSize' : 20,
+                 'font-family' : 'Helvetica',
+                 'height': '75%',
+                 'width': '75%',
                  'float': 'middle',
                  'position': 'relative',
                  'margin-top': 10,
@@ -256,8 +265,10 @@ page_1_layout = html.Div(children=[
              src="https://fournews-assets-prod-s3-ew1-nmprod.s3.amazonaws.com/media/2017/06/carbon-emissions-global-final.png",
              className ="twelve columns",
              style={
-                 'height': '100%',
-                 'width': '100%',
+                 'fontSize' : 20,
+                 'font-family' : 'Helvetica',
+                 'height': '75%',
+                 'width': '75%',
                  'float': 'middle',
                  'position': 'relative',
                  'margin-top': 10,
@@ -274,8 +285,10 @@ page_1_layout = html.Div(children=[
              src="https://fournews-assets-prod-s3b-ew1-aws-c4-pml.s3.amazonaws.com/media/2017/06/arctic-sea-ice-minimum-nasa.png",
              className ="twelve columns",
              style={
-                 'height': '100%',
-                 'width': '100%',
+                 'fontSize' : 20,
+                 'font-family' : 'Helvetica',
+                 'height': '75%',
+                 'width': '75%',
                  'float': 'middle',
                  'position': 'relative',
                  'margin-top': 10,
@@ -332,6 +345,47 @@ def select_gas_data(selector):
         }
     }
     return figure
+
+@app.callback(
+    dash.dependencies.Output('gas_type', 'children'),
+    [dash.dependencies.Input('dropdown1', 'value')]
+)
+def update_gas_type(gas_type):
+    #print(gas_type)
+    arguments[0] = gas_type
+
+@app.callback(
+    dash.dependencies.Output('graph_type', 'children'),
+    [dash.dependencies.Input('dropdown2', 'value')]
+)
+def update_graph_type(graph_type):
+    #print(graph_type)
+    arguments[1] = graph_type
+
+@app.callback(
+    dash.dependencies.Output('x-axis', 'children'),
+    [dash.dependencies.Input('dropdown3', 'value')]
+)
+def update_x_axis(x_axis):
+    #print(x_axis)
+    arguments[2] = x_axis
+
+@app.callback(
+    dash.dependencies.Output('y-axis', 'children'),
+    [dash.dependencies.Input('dropdown4', 'value')]
+)
+def update_y_axis(y_axis):
+    #print(y_axis)
+    arguments[3] = y_axis
+
+@app.callback(
+    dash.dependencies.Output('z-axis', 'children'),
+    [dash.dependencies.Input('dropdown5', 'value')]
+)
+def update_z_axis(z_axis):
+    #print(z_axis)
+    arguments[4] = z_axis
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
