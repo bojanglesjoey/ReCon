@@ -9,25 +9,26 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 # Boostrap CSS.
 app.css.append_css({'external_url': 'https://codepen.io/amyoshino/pen/jzXypZ.css'})
 
-#title of web page
-app.title = 'Dash Page'
+app.config.suppress_callback_exceptions = True
 
 app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.Div(id='page-content')
+])
+
+#title of web page
+app.title = 'ReCon'
+
+page_2_layout = html.Div([
     html.Div([
         html.Div([
             html.H1(children='Climate Change Data Visualization', 
-                className = "nine columns"),
-            html.Img(
-                src="https://upload.wikimedia.org/wikipedia/en/thumb/6/6d/Csa-asc_logo.svg/1200px-Csa-asc_logo.svg.png",
-                className ="two columns",
-                style={
-                    'height': '15%',
-                    'width': '15%',
-                    'float': 'right',
-                    'position': 'relative',
-                    'margin-top': 10,
-                },
-            ),
+                className = "twelve columns",
+                 style={'color' : 'white',
+                'fontSize' : 50,
+                'font-family' : 'Helvetica',
+                'font-size' : 64,
+                'background-image': 'url(https://raw.githubusercontent.com/bojanglesjoey/ReCon/master/banner.png)'}),
         ], className = "row"),
 
         html.Div([
@@ -190,8 +191,115 @@ app.layout = html.Div([
                 #multi=False,
             ),
         ], className = "row"),
+            html.Br(),
+    dcc.ConfirmDialogProvider(
+        children=html.Button(
+             'Publish',
+        ),
+        id='button-publish',
+        message='Publishing your findings will be implemented in the future!'
+    ),
+    html.Div(id='page-2-content'),
+    html.Br(),
+    dcc.Link('Go to Home Page', href='/'),
     ])
 ])
+
+page_1_layout = html.Div(children=[
+    html.Div(children=[
+        html.H1(children='ReCon: Climate Change Research to Consumers', 
+            className = "twelve columns",
+            style={'color' : 'white',
+                'fontSize' : 50,
+                'font-family' : 'Helvetica',
+                'font-size' : 64,
+                'background-image': 'url(https://raw.githubusercontent.com/bojanglesjoey/ReCon/master/banner.png)'}),
+    ], className = "row"),
+
+    html.Div(children=[
+        html.Img(
+             src="https://fournews-assets-prod-s3b-ew1-aws-c4-pml.s3.amazonaws.com/media/2017/06/global-temperatures-nasa.jpg",
+             className ="twelve columns",
+             style={
+                 'height': '100%',
+                 'width': '100%',
+                 'float': 'middle',
+                 'position': 'relative',
+                 'margin-top': 10,
+             },
+         ),
+    ]),
+    dcc.Textarea(
+        value='Global temperatures are rising. This graph from Nasa shows changes in global temperatures over the years. The different lines show the data collected by separate research centres.',
+        style={'width': '100%'}
+    ),
+    html.Div(children=[
+        html.Img(
+             src="https://fournews-assets-prod-s3-ew1-nmprod.s3.amazonaws.com/media/2017/06/co2-nasa.jpg",
+             className ="twelve columns",
+             style={
+                 'height': '100%',
+                 'width': '100%',
+                 'float': 'middle',
+                 'position': 'relative',
+                 'margin-top': 10,
+             },
+         ),
+    ]),
+    dcc.Textarea(
+        value='The amount of CO2 in the earth’s atmosphere is far higher than at any point in at least the last 400,000 years. And it’s still rising, this Nasa graph shows. CO2 levels have not been this high for at least three million years.',
+        style={'width': '100%'}
+    ),
+
+    html.Div(children=[
+        html.Img(
+             src="https://fournews-assets-prod-s3-ew1-nmprod.s3.amazonaws.com/media/2017/06/carbon-emissions-global-final.png",
+             className ="twelve columns",
+             style={
+                 'height': '100%',
+                 'width': '100%',
+                 'float': 'middle',
+                 'position': 'relative',
+                 'margin-top': 10,
+             },
+         ),
+    ]),
+    dcc.Textarea(
+        value='Research by the International Energy Agency charts the amount of energy-related carbon dioxide emissions across the world. Emissions are starting to level off, thanks to increased use of renewable energy and improved technology.',
+        style={'width': '100%'}
+    ),
+
+    html.Div(children=[
+        html.Img(
+             src="https://fournews-assets-prod-s3b-ew1-aws-c4-pml.s3.amazonaws.com/media/2017/06/arctic-sea-ice-minimum-nasa.png",
+             className ="twelve columns",
+             style={
+                 'height': '100%',
+                 'width': '100%',
+                 'float': 'middle',
+                 'position': 'relative',
+                 'margin-top': 10,
+             },
+         ),
+    ]),
+    dcc.Textarea(
+        value='Actic ice caps are melting. This shows the minimum amount of ice recorded in the Arctic each year. It is declining at a rate of 13.3 per cent every decade, according to Nasa.',
+        style={'width': '100%'}
+    ),
+
+    html.Div(id='page-1-content'),
+    html.Br(),
+    dcc.Link('Go to Graphing Page', href='/page-2'),
+])
+
+@app.callback(dash.dependencies.Output('page-content', 'children'),
+              [dash.dependencies.Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/page-2':
+        return page_2_layout
+    else:
+        return page_1_layout 
+    # You could also return a 404 "URL not found" page here
 
 @app.callback(
     dash.dependencies.Output('graph1', 'figure'),
