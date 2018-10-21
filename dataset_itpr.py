@@ -2,7 +2,7 @@
 
 # Reformats nc files for graphical representations
 
-from StringIO import StringIO
+from io import StringIO
 from netCDF4 import Dataset
 import os
 from os import listdir
@@ -33,8 +33,8 @@ class FormatNC():
 
     def _read_nc_files(self, gas):
         dataset = Dataset(self.d_names[gas], mode='r')
-        print gas
-        print dataset.variables
+        print(gas)
+        print(dataset.variables)
         alt = dataset.variables['altitude'][:]
         sunset_sunrise = dataset.variables['sunset_sunrise'][:]
         orbit = dataset.variables['orbit'][:]
@@ -68,7 +68,7 @@ class FormatNC():
 if __name__ == '__main__':
     gases = []
     if len(sys.argv) < 2:
-        print "Enter some gases!"
+        print("Enter some gases!")
     else:
         for i in range(1,len(sys.argv)):
             gases.append(sys.argv[i])
