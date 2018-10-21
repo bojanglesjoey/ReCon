@@ -9,13 +9,31 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 # Boostrap CSS.
 app.css.append_css({'external_url': 'https://codepen.io/amyoshino/pen/jzXypZ.css'})
 
-#title of web page
-app.title = 'Dash Page'
+app.config.suppress_callback_exceptions = True
 
-app.layout = html.Div(children=[
+app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.Div(id='page-content')
+])
+
+index_page = html.Div([
+    dcc.Link('Go to Graphing Page', href='/page-2'),
+    html.Br(),
+    dcc.Link('Go to Home Page', href='/page-1'),
+])
+
+#title of web page
+app.title = 'ReCon'
+
+page_2_layout = html.Div(children=[
     html.Div(children=[
         html.H1(children='Climate Change Data Visualization', 
-            className = "nine columns"),
+            className = "nine columns",
+            style={'color' : 'white',
+                'fontSize' : 50,
+                'font-family' : 'Helvetica',
+                'font-size' : 64,
+                'background-image': 'url(https://raw.githubusercontent.com/bojanglesjoey/ReCon/master/banner.png)'}),
         html.Img(
             src="https://upload.wikimedia.org/wikipedia/en/thumb/6/6d/Csa-asc_logo.svg/1200px-Csa-asc_logo.svg.png",
             className ="two columns",
@@ -100,8 +118,36 @@ app.layout = html.Div(children=[
             value=['ALT', 'LAT', 'CONC', 'PRES', 'TIME'],
             multi=False,
         ),
-    ], className = "row")
+    ], className = "row"),
+    html.Div(id='page-2-content'),
+    html.Br(),
+    dcc.Link('Go to Home Page', href='/'),
 ])
+
+page_1_layout = html.Div(children=[
+    html.Div(children=[
+        html.H1(children='ReCon: Climate Change Research to Consumers', 
+            className = "twelve columns",
+            style={'color' : 'white',
+                'fontSize' : 50,
+                'font-family' : 'Helvetica',
+                'font-size' : 64,
+                'background-image': 'url(https://raw.githubusercontent.com/bojanglesjoey/ReCon/master/banner.png)'}),
+    ], className = "row"),
+
+    html.Div(id='page-1-content'),
+    html.Br(),
+    dcc.Link('Go to Graphing Page', href='/page-2'),
+])
+
+@app.callback(dash.dependencies.Output('page-content', 'children'),
+              [dash.dependencies.Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/page-2':
+        return page_2_layout
+    else:
+        return page_1_layout 
+    # You could also return a 404 "URL not found" page here
 
 #callback for graph1
 '''@app.callback(
