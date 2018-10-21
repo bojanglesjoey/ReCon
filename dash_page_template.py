@@ -9,6 +9,8 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 # Boostrap CSS.
 app.css.append_css({'external_url': 'https://codepen.io/amyoshino/pen/jzXypZ.css'})
 
+arguments = [-1,-1,-1,-1,-1]
+
 #title of web page
 app.title = 'Dash Page'
 
@@ -205,7 +207,7 @@ app.layout = html.Div([
 )
 def update_gas_type(gas_type):
     #print(gas_type)
-    return gas_type
+    arguments[0] = gas_type
 
 @app.callback(
     dash.dependencies.Output('graph_type', 'children'),
@@ -213,7 +215,7 @@ def update_gas_type(gas_type):
 )
 def update_graph_type(graph_type):
     #print(graph_type)
-    return graph_type
+    arguments[1] = graph_type
 
 @app.callback(
     dash.dependencies.Output('x-axis', 'children'),
@@ -221,7 +223,7 @@ def update_graph_type(graph_type):
 )
 def update_x_axis(x_axis):
     #print(x_axis)
-    return x_axis
+    arguments[2] = x_axis
 
 @app.callback(
     dash.dependencies.Output('y-axis', 'children'),
@@ -229,7 +231,7 @@ def update_x_axis(x_axis):
 )
 def update_y_axis(y_axis):
     #print(y_axis)
-    return y_axis
+    arguments[3] = y_axis
 
 @app.callback(
     dash.dependencies.Output('z-axis', 'children'),
@@ -237,7 +239,7 @@ def update_y_axis(y_axis):
 )
 def update_z_axis(z_axis):
     #print(z_axis)
-    return z_axis
+    arguments[4] = z_axis
 
 if __name__ == '__main__':
     app.run_server(debug=True)
