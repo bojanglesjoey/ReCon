@@ -2,7 +2,7 @@
 
 # Reformats nc files for graphical representations
 
-from StringIO import StringIO
+from io import StringIO
 from netCDF4 import Dataset
 import os
 from os import listdir
@@ -58,6 +58,6 @@ if __name__ == '__main__':
     obj = FormatNC()
     obj.init()
     d, p, l = obj._read_nc_files("CO2")
-    print d
-    print p
-    print l
+    print(d)
+    print(p)
+    print(l)

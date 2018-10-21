@@ -9,7 +9,6 @@ import json
 from dataset_itpr import FormatNC
 
 
-app = dash.Dash()
 #x, y, z = np.random.multivariate_normal(np.array([0,0,0]), np.eye(3), 200).transpose()
 data = FormatNC()
 
