@@ -49,11 +49,7 @@ class FormatNC():
         pressure = dataset.variables['pressure'][:,:]
 
         #mask outliers
-        rows, cols = np.where(quality_flag != 0)
-        for i in range(0,len(rows)):
-            gas_conc[rows[i],cols[i]] = -999
-            pressure[rows[i],cols[i]] = -999
-            latitude[rows[i]] = -999
+        gas_conc = np.where(quality_flag != 0, None, gas_conc)
 
         return gas_conc, pressure, latitude
 
