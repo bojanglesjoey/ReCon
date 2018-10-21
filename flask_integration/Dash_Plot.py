@@ -127,7 +127,7 @@ def get_graph(graph, *args):
 	#args: gas,x,y,z
 	graphs = {key[:-4]:value for key, value in globals().items() if "_lag" in key}
 	graph, layout = graphs[graph](*args)
-	return graph, layout
+	return make_graph(graph, layout)
 
 
 if __name__ == '__main__':
@@ -135,8 +135,7 @@ if __name__ == '__main__':
 	z_name = 'concentration' 
 	y_name = 'beta_angle' 
 	gas = "CFC113"
-	graph, layout = get_graph("Heatmap",gas,x_name,y_name,z_name)
-	app.layout= make_graph(graph, layout)
+	app.layout = get_graph("Heatmap",gas,x_name,y_name,z_name)
 	app.run_server()
 
 """

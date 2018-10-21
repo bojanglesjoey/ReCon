@@ -1,6 +1,7 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import flask_integration.Dash_Plot as dp
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -9,26 +10,27 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 # Boostrap CSS.
 app.css.append_css({'external_url': 'https://codepen.io/amyoshino/pen/jzXypZ.css'})
 
-app.config.suppress_callback_exceptions = True
-
-app.layout = html.Div([
-    dcc.Location(id='url', refresh=False),
-    html.Div(id='page-content')
-])
+arguments = [-1,-1,-1,-1,-1]
 
 #title of web page
-app.title = 'ReCon'
+app.title = 'Dash Page'
 
-page_2_layout = html.Div([
+app.layout = html.Div([
     html.Div([
         html.Div([
             html.H1(children='Climate Change Data Visualization', 
-                className = "twelve columns",
-                 style={'color' : 'white',
-                'fontSize' : 50,
-                'font-family' : 'Helvetica',
-                'font-size' : 64,
-                'background-image': 'url(https://raw.githubusercontent.com/bojanglesjoey/ReCon/master/banner.png)'}),
+                className = "nine columns"),
+            html.Img(
+                src="https://upload.wikimedia.org/wikipedia/en/thumb/6/6d/Csa-asc_logo.svg/1200px-Csa-asc_logo.svg.png",
+                className ="two columns",
+                style={
+                    'height': '15%',
+                    'width': '15%',
+                    'float': 'right',
+                    'position': 'relative',
+                    'margin-top': 10,
+                },
+            ),
         ], className = "row"),
 
         html.Div([
@@ -48,7 +50,7 @@ page_2_layout = html.Div([
                 dcc.Graph(
                     id='graph1',
                 )
-            ], className = "eight columns"),
+            ], className = "twelve columns"),
         ], className = "row"),
 
         html.Div([
@@ -108,9 +110,10 @@ page_2_layout = html.Div([
                 dcc.Dropdown(
                     id='dropdown2',
                     options=[
-                        {'label':'Scatter Plot','value':'SCAT'},
-                        {'label':'Surface Plot','value':'SURF'},
-                        {'label':'Heat Map','value':'HEAT'}
+                        {'label':'3D Scatter Plot','value':'Scatter3d'},
+                        {'label':'2D Scatter Plot','value':'Scatter'},
+                        {'label':'Surface Plot','value':'Surface'},
+                        {'label':'Heat Map','value':'Heatmap'}
                     ],
                     value=['SCAT','SURF','HEAT'],
                     #multi=False,
@@ -191,147 +194,56 @@ page_2_layout = html.Div([
                 #multi=False,
             ),
         ], className = "row"),
-            html.Br(),
-    dcc.ConfirmDialogProvider(
-        children=html.Button(
-             'Publish',
-        ),
-        id='button-publish',
-        message='Publishing your findings will be implemented in the future!'
-    ),
-    html.Div(id='page-2-content'),
-    html.Br(),
-    dcc.Link('Go to Home Page', href='/'),
-    ])
+    ]),
+    html.Div(id='gas_type'),
+    html.Div(id='graph_type'),
+    html.Div(id='x-axis'),
+    html.Div(id='y-axis'),
+    html.Div(id='z-axis'),
 ])
-
-page_1_layout = html.Div(children=[
-    html.Div(children=[
-        html.H1(children='ReCon: Climate Change Research to Consumers', 
-            className = "twelve columns",
-            style={'color' : 'white',
-                'fontSize' : 50,
-                'font-family' : 'Helvetica',
-                'font-size' : 64,
-                'background-image': 'url(https://raw.githubusercontent.com/bojanglesjoey/ReCon/master/banner.png)'}),
-    ], className = "row"),
-
-    html.Div(children=[
-        html.Img(
-             src="https://fournews-assets-prod-s3b-ew1-aws-c4-pml.s3.amazonaws.com/media/2017/06/global-temperatures-nasa.jpg",
-             className ="twelve columns",
-             style={
-                 'height': '100%',
-                 'width': '100%',
-                 'float': 'middle',
-                 'position': 'relative',
-                 'margin-top': 10,
-             },
-         ),
-    ]),
-    dcc.Textarea(
-        value='Global temperatures are rising. This graph from Nasa shows changes in global temperatures over the years. The different lines show the data collected by separate research centres.',
-        style={'width': '100%'}
-    ),
-    html.Div(children=[
-        html.Img(
-             src="https://fournews-assets-prod-s3-ew1-nmprod.s3.amazonaws.com/media/2017/06/co2-nasa.jpg",
-             className ="twelve columns",
-             style={
-                 'height': '100%',
-                 'width': '100%',
-                 'float': 'middle',
-                 'position': 'relative',
-                 'margin-top': 10,
-             },
-         ),
-    ]),
-    dcc.Textarea(
-        value='The amount of CO2 in the earth’s atmosphere is far higher than at any point in at least the last 400,000 years. And it’s still rising, this Nasa graph shows. CO2 levels have not been this high for at least three million years.',
-        style={'width': '100%'}
-    ),
-
-    html.Div(children=[
-        html.Img(
-             src="https://fournews-assets-prod-s3-ew1-nmprod.s3.amazonaws.com/media/2017/06/carbon-emissions-global-final.png",
-             className ="twelve columns",
-             style={
-                 'height': '100%',
-                 'width': '100%',
-                 'float': 'middle',
-                 'position': 'relative',
-                 'margin-top': 10,
-             },
-         ),
-    ]),
-    dcc.Textarea(
-        value='Research by the International Energy Agency charts the amount of energy-related carbon dioxide emissions across the world. Emissions are starting to level off, thanks to increased use of renewable energy and improved technology.',
-        style={'width': '100%'}
-    ),
-
-    html.Div(children=[
-        html.Img(
-             src="https://fournews-assets-prod-s3b-ew1-aws-c4-pml.s3.amazonaws.com/media/2017/06/arctic-sea-ice-minimum-nasa.png",
-             className ="twelve columns",
-             style={
-                 'height': '100%',
-                 'width': '100%',
-                 'float': 'middle',
-                 'position': 'relative',
-                 'margin-top': 10,
-             },
-         ),
-    ]),
-    dcc.Textarea(
-        value='Actic ice caps are melting. This shows the minimum amount of ice recorded in the Arctic each year. It is declining at a rate of 13.3 per cent every decade, according to Nasa.',
-        style={'width': '100%'}
-    ),
-
-    html.Div(id='page-1-content'),
-    html.Br(),
-    dcc.Link('Go to Graphing Page', href='/page-2'),
-])
-
-@app.callback(dash.dependencies.Output('page-content', 'children'),
-              [dash.dependencies.Input('url', 'pathname')])
-def display_page(pathname):
-    if pathname == '/page-2':
-        return page_2_layout
-    else:
-        return page_1_layout 
-    # You could also return a 404 "URL not found" page here
 
 @app.callback(
-    dash.dependencies.Output('graph1', 'figure'),
-    [dash.dependencies.Input('dropdown1', 'value')])
-def select_gas_data(selector):
-    data = []
-    if type(selector) == str:
-        if 'CO2' in selector:
-            data.append({'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'line', 'name': 'CO2'})
-        if 'H2O' in selector:
-            data.append({'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'line', 'name': 'H2O'})
-    figure = {
-        'data': data,
-        'layout': {
-            'title': 'Data Visualization',
-            'xaxis' : dict(
-                title='x Axis',
-                titlefont=dict(
-                family='Courier New, monospace',
-                size=20,
-                color='#7f7f7f'
-            )),
-            'yaxis' : dict(
-                title='y Axis',
-                titlefont=dict(
-                family='Helvetica, monospace',
-                size=20,
-                color='#7f7f7f'
-            ))
-        }
-    }
-    return figure
+    dash.dependencies.Output('gas_type', 'children'),
+    [dash.dependencies.Input('dropdown1', 'value')]
+)
+def update_gas_type(gas_type):
+    #print(gas_type)
+    arguments[0] = gas_type
+
+@app.callback(
+    dash.dependencies.Output('graph_type', 'children'),
+    [dash.dependencies.Input('dropdown2', 'value')]
+)
+def update_graph_type(graph_type):
+    #print(graph_type)
+    arguments[1] = graph_type
+
+@app.callback(
+    dash.dependencies.Output('x-axis', 'children'),
+    [dash.dependencies.Input('dropdown3', 'value')]
+)
+def update_x_axis(x_axis):
+    #print(x_axis)
+    arguments[2] = x_axis
+
+@app.callback(
+    dash.dependencies.Output('y-axis', 'children'),
+    [dash.dependencies.Input('dropdown4', 'value')]
+)
+def update_y_axis(y_axis):
+    #print(y_axis)
+    arguments[3] = y_axis
+
+@app.callback(
+    dash.dependencies.Output('z-axis', 'children'),
+    [dash.dependencies.Input('dropdown5', 'value')]
+)
+def update_z_axis(z_axis):
+    #print(z_axis)
+    arguments[4] = z_axis
+    argu = [i for i in arguments if not i == -1]
+    dp.get_graph(*argu)
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
