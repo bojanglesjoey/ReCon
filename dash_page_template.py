@@ -30,6 +30,24 @@ app.layout = html.Div(children=[
     ], className = "row"),
 
     html.Div(children=[
+        dcc.Checklist(
+            options=[
+                {'label': 'Display Moving Average', 'value': 'MOVAVG'}
+            ],
+            values=['MOVAVG'],
+            labelStyle={'display': 'inline-block'},
+        )
+    ], className = "row"),
+
+    html.Div(children=[
+        html.Div(children=[
+            dcc.Graph(
+                id='graph1',
+            )
+        ], className = "eight columns"),
+    ], className = "row"),
+
+    html.Div(children=[
         html.Div(children='''
             Choose a gas of interest.
         '''),
@@ -41,39 +59,9 @@ app.layout = html.Div(children=[
                 {'label': 'Water Vapour', 'value': 'H2O'}
             ],
             #default value(s)
-            #value=['MTL', 'NYC'],
-            multi=False
+            value=['CO2', 'H2O'],
+            multi=False,
         ),
-    ], className = "row"),
-    
-
-    html.Div(children=[
-        dcc.Graph(
-            id='graph1',
-            figure={
-                'data': [
-                    {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'line', 'name': 'SF'},
-                    {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
-                ],
-                'layout': {
-                    'title': 'Dash Data Visualization',
-                    'xaxis' : dict(
-                        title='x Axis',
-                        titlefont=dict(
-                        family='Courier New, monospace',
-                        size=20,
-                        color='#7f7f7f'
-                    )),
-                    'yaxis' : dict(
-                        title='y Axis',
-                        titlefont=dict(
-                        family='Helvetica, monospace',
-                        size=20,
-                        color='#7f7f7f'
-                    ))
-                }
-            }
-        )
     ], className = "row"),
 
     html.Div(children=[
@@ -87,9 +75,11 @@ app.layout = html.Div(children=[
                 {'label': 'Altitude', 'value': 'ALT'},
                 {'label': 'Latitude', 'value': 'LAT'},
                 {'label': 'Gas Concentration', 'value': 'CONC'},
-                {'label': 'Pressure', 'value': 'PRES'}
+                {'label': 'Pressure', 'value': 'PRES'},
+                {'label': 'Time', 'value': 'TIME'}
             ],
-            multi=False
+            value=['ALT', 'LAT', 'CONC', 'PRES', 'TIME'],
+            multi=False,
         ),
     ], className = "row"),
 
@@ -104,12 +94,46 @@ app.layout = html.Div(children=[
                 {'label': 'Altitude', 'value': 'ALT'},
                 {'label': 'Latitude', 'value': 'LAT'},
                 {'label': 'Gas Concentration', 'value': 'CONC'},
-                {'label': 'Pressure', 'value': 'PRES'}
+                {'label': 'Pressure', 'value': 'PRES'},
+                {'label': 'Time', 'value': 'TIME'}
             ],
-            multi=False
+            value=['ALT', 'LAT', 'CONC', 'PRES', 'TIME'],
+            multi=False,
         ),
     ], className = "row")
 ])
+
+#callback for graph1
+'''@app.callback(
+    dash.dependencies.Output('graph1', 'figure'),
+    [dash.dependencies.Input('Cities', 'values')])
+def update_graph(selector):
+    data = []
+    if 'SF' in selector:
+        data.append({'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'})
+    if 'MT' in selector:
+        data.append({'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'})
+    figure = {
+        'data': data,
+        'layout': {
+            'title': 'Graph 1',
+            'xaxis' : dict(
+                title='x Axis',
+                titlefont=dict(
+                family='Courier New, monospace',
+                size=20,
+                color='#7f7f7f'
+            )),
+            'yaxis' : dict(
+                title='y Axis',
+                titlefont=dict(
+                family='Helvetica, monospace',
+                size=20,
+                color='#7f7f7f'
+            ))
+        }
+    }
+    return figure'''
 
 if __name__ == '__main__':
     app.run_server(debug=True)
